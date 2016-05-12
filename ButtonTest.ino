@@ -116,22 +116,33 @@ void reset(){
   for (int i = 0; i < NUM_LEDS; i++){
     currentSequence[i] = 0;
   }
+  resetTimer = RESET_TIME;
 }
 
 
 ISR(TIMER1_COMPA_vect){ 
-   resetTimer--;
-   
+   Serial.print(resetTimer);
+   resetTimer--; 
+      
    if (resetTimer == 0){
+
       Serial.println("Reset, waited too long in between "); // time between button presses too long
-      resetGame();
-   }else if (resetTimer == RESET_TIME){
-    
-   }else if (resetTimer == RESET_TIME - 1){
-    
-   }else if (resetTimer == RESET_TIMER -2){
-    
    }
+   else if (resetTimer == RESET_TIME - 1){
+    digitalWrite(timerLeds[0], HIGH);
+   }
+   else if (resetTimer == RESET_TIME - 2){
+    digitalWrite(timerLeds[0], LOW);
+    digitalWrite(timerLeds[1], HIGH);
+   }
+   else if (resetTimer == RESET_TIME - 3){
+    digitalWrite(timerLeds[1], LOW);
+    digitalWrite(timerLeds[2], HIGH);    
+   }
+   else {
+    digitalWrite(timerLeds[2], LOW); 
+    return;
+   }   
 }
 
 
